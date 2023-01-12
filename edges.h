@@ -4,8 +4,9 @@
 
 #ifndef MATALA4C_EDGES_H
 #define MATALA4C_EDGES_H
-//#include "nodes.h"
 
-typedef struct edge_ edge, *pedge;
+#include "nodes.h"
+
+
 
 #endif //MATALA4C_EDGES_H
