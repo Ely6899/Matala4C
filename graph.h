@@ -23,7 +23,9 @@ typedef struct GRAPH_NODE_ {
 
 
 void build_graph_cmd(pnode *head);
+void build_nodeList(pnode *head, int);
 void build_block(pnode *head);
+pnode search_nodeList(pnode *head, int);
 
 void insert_node_cmd(pnode *head);
 
