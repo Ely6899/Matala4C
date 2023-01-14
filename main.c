@@ -47,6 +47,8 @@ int main() {
                 break;
             case 'B':
                 insert_node_cmd(pointerToHead);
+                printGraph_cmd(firstNode);
+                printf("\n");
                 break;
             case 'D':
                 delete_node_cmd(pointerToHead);

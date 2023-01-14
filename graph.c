@@ -7,6 +7,7 @@
 
 char inputGraphs;
 
+//1
 void build_graph_cmd(pnode *head){
     int numOfNodes = 0;
     inputGraphs = (char ) fgetc(stdin);
@@ -26,7 +27,6 @@ void build_graph_cmd(pnode *head){
         }
     }
 }
-
 void build_nodeList(pnode *head, int numberOfNodes){
     pnode root = *head; //Get address of first node in list.
 
@@ -42,7 +42,6 @@ void build_nodeList(pnode *head, int numberOfNodes){
         }
     }
 }
-
 void build_block(pnode *head) {
     //pnode nodeRoot = *head;
     pnode temp;
@@ -91,7 +90,6 @@ void build_block(pnode *head) {
         }
     }
 }
-
 pnode search_nodeList(pnode *head, int find){
     pnode helper = *head;
     while(helper != NULL){
@@ -101,7 +99,6 @@ pnode search_nodeList(pnode *head, int find){
     }
     return NULL;
 }
-
 void add_edge_to_end(pnode root, pedge newEdge){
     if(root->edges == NULL)
         root->edges = newEdge;
@@ -114,14 +111,91 @@ void add_edge_to_end(pnode root, pedge newEdge){
     }
 }
 
-void insert_node_cmd(pnode *head){
 
+//2
+void insert_node_cmd(pnode *head){
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+
+    int givenNodeNumber = atoi(&inputGraphs);
+    pnode newNodeAddress = search_nodeList(head, givenNodeNumber);
+
+    //Add new node
+    if(newNodeAddress == NULL){
+        newNodeAddress = addNodeToEnd(head, givenNodeNumber);
+    }
+    else{
+        deleteEdgesOfNode(newNodeAddress);
+    }
+
+    int buildFlag = 0, endNode = 0;
+    while(inputGraphs != 'A' && inputGraphs != 'B' && inputGraphs != 'D' && inputGraphs != 'S' && inputGraphs != 'T' && inputGraphs != EOF){
+        inputGraphs = (char ) getc(stdin);
+
+        if(inputGraphs == ' ')
+            continue;
+
+        if(
+        inputGraphs == 'n' ||
+        inputGraphs == EOF ||
+        inputGraphs == '\0'||
+        inputGraphs == 'A' ||
+        inputGraphs == 'B' ||
+        inputGraphs == 'D' ||
+        inputGraphs == 'S' ||
+        inputGraphs == 'T')
+            break;
+
+        if(buildFlag == 0){
+            endNode = atoi(&inputGraphs);
+            buildFlag = (buildFlag + 1) % 2;
+            continue;
+        }
+
+        if(buildFlag == 1){
+            pedge newEdge = calloc(1, sizeof (edge));
+            newEdge->weight = atoi(&inputGraphs);
+            newEdge->endpoint = search_nodeList(head, endNode);
+            newEdge->next = NULL;
+            add_edge_to_end(newNodeAddress, newEdge);
+            buildFlag = (buildFlag + 1) % 2;
+            //printf("new edge added (%d)----(%d)----(%d)\n", numToFind, newEdge->weight, newEdge->endpoint->node_num);
+            continue;
+        }
+
+
+    }
+}
+pnode addNodeToEnd(pnode *head, int newNodeValue){
+    pnode newNode = calloc(1, sizeof (node));
+    newNode->node_num = newNodeValue;
+
+    pnode curr = *head;
+    while(curr->next != NULL){
+        curr = curr->next;
+    }
+    curr->next = newNode;
+
+    return newNode;
 }
 
+
+//3
 void delete_node_cmd(pnode *head){
 
 }
 
+
+//4
+void shortsPath_cmd(pnode head){
+    inputGraphs = (char ) getc(stdin);
+}
+
+
+//4
+void TSP_cmd(pnode head){
+    inputGraphs = (char ) getc(stdin);
+}
 
 /*
  * Print functions
@@ -140,7 +214,6 @@ void printEdgesOfNode(pnode root){
         edgeHelper = edgeHelper->next;
     }
 }
-
 
 
 /*
@@ -176,12 +249,4 @@ void deleteNodes(pnode *head){
         free(helper);
     }
     *head = NULL;
-}
-
-void shortsPath_cmd(pnode head){
-    inputGraphs = (char ) getc(stdin);
-}
-
-void TSP_cmd(pnode head){
-    inputGraphs = (char ) getc(stdin);
 }

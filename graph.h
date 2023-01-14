@@ -21,32 +21,44 @@ typedef struct GRAPH_NODE_ {
 } node, *pnode;
 
 
-
+//1
 void build_graph_cmd(pnode *head);
 void build_nodeList(pnode *head, int numOfNodes);
 void build_block(pnode *head);
 pnode search_nodeList(pnode *head, int find);
 void add_edge_to_end(pnode root, pedge);
 
+
+//2
 void insert_node_cmd(pnode *head);
+pnode addNodeToEnd(pnode *head, int newNodeValue);
 
 
+//3
 void delete_node_cmd(pnode *head);
 
 
+//4
+void shortsPath_cmd(pnode head);
+
+
+//4
+void TSP_cmd(pnode head);
+
+
+/*
+ * Print functions
+ * */
 void printGraph_cmd(pnode head); //for self debug
 void printEdgesOfNode(pnode root);
 
 
+/*
+ * Deletion functions
+ * */
 void deleteGraph_cmd(pnode* head);
 void deleteEdgesOfNode(pnode root);
 void deleteNodes(pnode *head);
-
-
-void shortsPath_cmd(pnode head);
-
-
-void TSP_cmd(pnode head);
 
 
 #endif //MATALA4C_GRAPH_H
