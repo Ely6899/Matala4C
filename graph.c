@@ -179,9 +179,9 @@ void deleteNodes(pnode *head){
 }
 
 void shortsPath_cmd(pnode head){
-
+    inputGraphs = (char ) getc(stdin);
 }
 
 void TSP_cmd(pnode head){
-
+    inputGraphs = (char ) getc(stdin);
 }

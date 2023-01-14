@@ -30,6 +30,7 @@ int main() {
     pnode firstNode;//first node allocation.
     pnode *pointerToHead;//Pointer to the head node address.
     int graphExists = 0;
+
     while(input != EOF){
         switch (input) {
             case 'A':
@@ -38,9 +39,11 @@ int main() {
                 }
                 firstNode = calloc(1, sizeof (node)); //first node allocation.
                 pointerToHead = &firstNode; //Pointer to the head node address.
+
                 build_graph_cmd(pointerToHead);
                 graphExists = 1;
                 printGraph_cmd(firstNode);
+                printf("\n");
                 break;
             case 'B':
                 insert_node_cmd(pointerToHead);
@@ -57,7 +60,10 @@ int main() {
             default:
                 break;
         }
-        input = (char)fgetc(stdin);
+        if(inputGraphs != ' ')
+            input = inputGraphs;
+        else
+            input = (char)fgetc(stdin);
     }
     printf("\n");
     deleteGraph_cmd(pointerToHead);
