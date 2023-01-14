@@ -5,104 +5,105 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char inputGraphs;
+
 void build_graph_cmd(pnode *head){
-    char currInput; //Current input in the stream.
-    int numOfNodes = 0; //Number of nodes to build.
-    scanf("%c", &currInput);
-    while(currInput != 'A' && currInput != 'B' && currInput != 'D' && currInput != 'S' && currInput != 'T'){
-        //Scan next char and continue loop.
-        if(currInput == ' '){
-            scanf("%c", &currInput);
-            continue;
-        }
+    int numOfNodes = 0;
+    inputGraphs = (char ) fgetc(stdin);
+    while(inputGraphs != 'A' && inputGraphs != 'B' && inputGraphs != 'D' && inputGraphs != 'S' && inputGraphs != 'T' && inputGraphs != EOF){
+        if(inputGraphs == ' ')
+            inputGraphs = (char ) fgetc(stdin);
 
-        //If we don't have the number of nodes, then find it. Will only happen once.
         if(numOfNodes == 0){
-            numOfNodes = atoi(&currInput);
+            numOfNodes = atoi(&inputGraphs);
             build_nodeList(head, numOfNodes);
-            scanf("%c", &currInput);
-            continue;
+            inputGraphs = (char ) fgetc(stdin);
         }
 
-        if(currInput == 'n'){
+        if(inputGraphs == 'n'){
             build_block(head);
-        }
-
-        if(scanf("%c", &currInput) == EOF){
-            break;
+            continue;
         }
     }
 }
 
 void build_nodeList(pnode *head, int numberOfNodes){
-    node *root = *head; //Get address of first node in list.
+    pnode root = *head; //Get address of first node in list.
 
     //Build a linked list by iterating through the number of nodes given
     for(int i = 1; i <= numberOfNodes; i++){
         root->node_num = i - 1;
-        if(i == numberOfNodes){
-            root->next = NULL; //If last of the nodes, next value should be null
+        if(i != numberOfNodes){
+            root->next = malloc(sizeof (node)); //If last of the nodes, next value should be null
+            root = root->next;
         }
         else{
-            root->next = malloc(sizeof (node));
-            root = root->next; //point to next node in list.
+            root->next = NULL; //point to next node in list.
         }
     }
 }
 
-void build_block(pnode *head){
-    pnode root = *head;
-    char currInput;
-    int getRoot = 0; //Boolean of root node to add edges to.
-    int typeSwitcher = 0;
-    int endNode;
-    scanf("%c", &currInput);
-    while(currInput != 'n'){
-        if(currInput == ' '){
-            scanf("%c", &currInput);
+void build_block(pnode *head) {
+    //pnode nodeRoot = *head;
+    pnode temp;
+    int endNode = 0;
+    int buildFlag = 0, rootFlag = 0, numToFind = 0;
+    inputGraphs = (char ) getc(stdin);
+    while(inputGraphs != 'n' ){
+        inputGraphs = (char ) getc(stdin);
+        if(inputGraphs == ' '){
             continue;
         }
 
-        if(getRoot == 0){
-            getRoot = 1;
-            root = search_nodeList(head, atoi(&currInput));
-            scanf("%c", &currInput);
+        if(inputGraphs == 'n' || inputGraphs == EOF || inputGraphs == '\0')
+            break;
+
+        if(rootFlag == 0){
+            numToFind = atoi(&inputGraphs);
+            temp = search_nodeList(head, numToFind);
+            rootFlag = 1;
             continue;
         }
 
-        //End node input.
-        if(typeSwitcher == 0){
-            endNode = atoi(&currInput);
-            scanf("%c", &currInput);
-            typeSwitcher += 1;
+        if(buildFlag == 0){
+            endNode = atoi(&inputGraphs);
+            buildFlag = (buildFlag + 1) % 2;
+            continue;
         }
 
-        //Edge node input.
-        if(typeSwitcher == 1){
-            pedge newEdge = malloc(sizeof (edge)); //new edge node
-            newEdge->weight = atoi(&currInput); //current char in input is weight of the node.
-            newEdge->endpoint = search_nodeList(head,endNode); //Pointer to relevant end node.
+        if(buildFlag == 1){
+            pedge newEdge = malloc(sizeof (edge));
+            newEdge->weight = atoi(&inputGraphs);
+            newEdge->endpoint = search_nodeList(head, endNode);
             newEdge->next = NULL;
-            //TODO Add edge adder function
-            root->edges = newEdge; //
-            scanf("%c", &currInput);
+            add_edge_to_end(temp, newEdge);
+            //printf("new edge added (%d)----(%d)----(%d)\n", numToFind, newEdge->weight, newEdge->endpoint->node_num);
+            buildFlag = (buildFlag + 1) % 2;
+            continue;
         }
-
-
-
-
-
-
     }
 }
 
-pnode search_nodeList(pnode* head, int find){
-    node *root = *head;
-    while(root != NULL){
-        if(root->node_num == find)
-            return root;
+pnode search_nodeList(pnode *head, int find){
+    pnode helper = *head;
+    while(helper != NULL){
+        if(helper->node_num == find)
+            return helper;
+        helper = helper->next;
     }
     return NULL;
+}
+
+void add_edge_to_end(pnode root, pedge newEdge){
+    if(root->edges == NULL)
+        root->edges = newEdge;
+    else{
+        pedge edgeHead = root->edges;
+        while(edgeHead->next != NULL){
+            edgeHead = edgeHead->next;
+        }
+        edgeHead->next = newEdge;
+    }
 }
 
 void insert_node_cmd(pnode *head){
@@ -114,8 +115,19 @@ void delete_node_cmd(pnode *head){
 }
 
 void printGraph_cmd(pnode head){
+    while(head != NULL){
+        printEdgesOfNode(head);
+        head = head->next;
+    }
 
 } //for self debug
+void printEdgesOfNode(pnode root){
+    pedge edgeHelper = root->edges;
+    while(edgeHelper != NULL){
+        printf("(%d)----(%d)----(%d)\n", root->node_num, edgeHelper->weight, edgeHelper->endpoint->node_num);
+        edgeHelper = edgeHelper->next;
+    }
+}
 
 void deleteGraph_cmd(pnode* head){
 

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "graph.h"
 
+char input;
+
 void print_nodes(pnode *head){
     node *root = *head;
     while(root != NULL){
@@ -23,38 +25,40 @@ void deallocate_nodes(pnode *head){
 }
 
 int main() {
-    char input;
+    input = (char)fgetc(stdin);
     pnode firstNode = malloc(sizeof (node)); //first node allocation.
-    pnode *pointerToHead = &firstNode; //Pointer to the head node address.
-    build_nodes(pointerToHead, 10);
-    print_nodes(pointerToHead);
-    deallocate_nodes(pointerToHead);
-    /*if(firstNode == NULL)
+    if(firstNode == NULL)
         exit(2);
 
-    while(scanf("%c", &input) != EOF){
+    pnode *pointerToHead = &firstNode; //Pointer to the head node address.
+    while(input != EOF){
         switch (input) {
             case 'A':
                 build_graph_cmd(pointerToHead);
+                printGraph_cmd(firstNode);
+                input = (char )fgetc(stdin);
                 break;
             case 'B':
                 insert_node_cmd(pointerToHead);
+                input = (char )fgetc(stdin);
                 break;
             case 'D':
                 delete_node_cmd(pointerToHead);
+                input = (char )fgetc(stdin);
                 break;
             case 'S':
                 shortsPath_cmd(firstNode);
+                input = (char )fgetc(stdin);
                 break;
             case 'T':
                 TSP_cmd(firstNode);
+                input = (char )fgetc(stdin);
                 break;
             default:
-                printf("%c", input);
-
+                input = (char )fgetc(stdin);
         }
     }
-    free(firstNode);
-    printf("\n");*/
+    printf("\n");
+
     return 0;
 }

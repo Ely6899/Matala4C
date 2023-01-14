@@ -23,9 +23,10 @@ typedef struct GRAPH_NODE_ {
 
 
 void build_graph_cmd(pnode *head);
-void build_nodeList(pnode *head, int);
+void build_nodeList(pnode *head, int numOfNodes);
 void build_block(pnode *head);
-pnode search_nodeList(pnode *head, int);
+pnode search_nodeList(pnode *head, int find);
+void add_edge_to_end(pnode root, pedge);
 
 void insert_node_cmd(pnode *head);
 
@@ -34,6 +35,7 @@ void delete_node_cmd(pnode *head);
 
 
 void printGraph_cmd(pnode head); //for self debug
+void printEdgesOfNode(pnode root);
 
 
 void deleteGraph_cmd(pnode* head);
