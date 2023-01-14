@@ -6,14 +6,11 @@
 #define MATALA4C_GRAPH_H
 
 typedef struct GRAPH_NODE_ *pnode;
-
 typedef struct edge_ {
     int weight;
     pnode endpoint;
     struct edge_ *next;
 } edge, *pedge;
-
-
 typedef struct GRAPH_NODE_ {
     int node_num;
     pedge edges;
@@ -36,6 +33,8 @@ pnode addNodeToEnd(pnode *head, int newNodeValue);
 
 //3
 void delete_node_cmd(pnode *head);
+void deleteEdgeFromNode(pnode root, pedge edge);
+void deleteNode(pnode *head, int value);
 
 
 //4

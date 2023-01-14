@@ -52,6 +52,8 @@ int main() {
                 break;
             case 'D':
                 delete_node_cmd(pointerToHead);
+                printGraph_cmd(firstNode);
+                printf("\n");
                 break;
             case 'S':
                 shortsPath_cmd(firstNode);

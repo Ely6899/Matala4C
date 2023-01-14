@@ -182,7 +182,63 @@ pnode addNodeToEnd(pnode *head, int newNodeValue){
 
 //3
 void delete_node_cmd(pnode *head){
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin); //Get required node we wish to delete.
+    int deletedNodeValue = atoi(&inputGraphs);
+    pnode addressOfNodeToDelete = search_nodeList(head, deletedNodeValue);
 
+    pnode currNode = *head;
+    while(currNode != NULL){
+        pedge edgeHelper = currNode->edges;
+        while(edgeHelper != NULL){
+            if(edgeHelper->endpoint == addressOfNodeToDelete){
+                deleteEdgeFromNode(currNode, edgeHelper);
+            }
+            edgeHelper = edgeHelper->next;
+        }
+        currNode = currNode->next;
+    }
+
+    deleteEdgesOfNode(addressOfNodeToDelete);
+    deleteNode(head, deletedNodeValue);
+
+    inputGraphs = (char ) getc(stdin);
+}
+void deleteEdgeFromNode(pnode root, pedge edge){
+    if(root->edges == edge){
+        pedge to_remove = root->edges;
+        to_remove->endpoint = NULL;
+        root->edges = root->edges->next;
+        free(to_remove);
+        return;
+    }
+
+    for(pedge helper = root->edges; helper->next != NULL; helper = helper->next){
+        if(helper->next == edge){
+            pedge to_remove = helper->next;
+            to_remove->endpoint = NULL;
+            helper->next = helper->next->next;
+            free(to_remove);
+            return;
+        }
+    }
+}
+void deleteNode(pnode *head, int value){
+    if((*head)->node_num == value){
+        pnode to_remove = *head;
+        *head = (*head)->next;
+        free(to_remove);
+        return;
+    }
+
+    for(pnode helper = *head; helper->next != NULL; helper = helper->next){
+        if(helper->next->node_num == value){
+            pnode to_remove = helper->next;
+            helper->next = helper->next->next;
+            free(to_remove);
+            return;
+        }
+    }
 }
 
 
