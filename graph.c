@@ -34,7 +34,7 @@ void build_nodeList(pnode *head, int numberOfNodes){
     for(int i = 1; i <= numberOfNodes; i++){
         root->node_num = i - 1;
         if(i != numberOfNodes){
-            root->next = malloc(sizeof (node)); //If last of the nodes, next value should be null
+            root->next = calloc(1, sizeof (node)); //If last of the nodes, next value should be null
             root = root->next;
         }
         else{
@@ -55,7 +55,15 @@ void build_block(pnode *head) {
             continue;
         }
 
-        if(inputGraphs == 'n' || inputGraphs == EOF || inputGraphs == '\0')
+        if(
+        inputGraphs == 'n' ||
+        inputGraphs == EOF ||
+        inputGraphs == '\0'||
+        inputGraphs == 'A' ||
+        inputGraphs == 'B' ||
+        inputGraphs == 'D' ||
+        inputGraphs == 'S' ||
+        inputGraphs == 'T')
             break;
 
         if(rootFlag == 0){
@@ -72,7 +80,7 @@ void build_block(pnode *head) {
         }
 
         if(buildFlag == 1){
-            pedge newEdge = malloc(sizeof (edge));
+            pedge newEdge = calloc(1, sizeof (edge));
             newEdge->weight = atoi(&inputGraphs);
             newEdge->endpoint = search_nodeList(head, endNode);
             newEdge->next = NULL;
@@ -114,6 +122,10 @@ void delete_node_cmd(pnode *head){
 
 }
 
+
+/*
+ * Print functions
+ * */
 void printGraph_cmd(pnode head){
     while(head != NULL){
         printEdgesOfNode(head);
@@ -124,13 +136,46 @@ void printGraph_cmd(pnode head){
 void printEdgesOfNode(pnode root){
     pedge edgeHelper = root->edges;
     while(edgeHelper != NULL){
-        printf("(%d)----(%d)----(%d)\n", root->node_num, edgeHelper->weight, edgeHelper->endpoint->node_num);
+        printf("(%d)----(%d)---->(%d)\n", root->node_num, edgeHelper->weight, edgeHelper->endpoint->node_num);
         edgeHelper = edgeHelper->next;
     }
 }
 
-void deleteGraph_cmd(pnode* head){
 
+
+/*
+ * De-allocation functions
+ * */
+void deleteGraph_cmd(pnode* head){
+    pnode currNode = *head;
+
+    while(currNode != NULL){
+        deleteEdgesOfNode(currNode);
+        currNode = currNode->next;
+    }
+
+    deleteNodes(head);
+
+}
+void deleteEdgesOfNode(pnode root){
+    pedge currEdge = root->edges;
+
+    while(currEdge != NULL){
+        pedge helper = currEdge;
+        currEdge = currEdge->next;
+        free(helper);
+    }
+    root->edges = NULL; //Disconnect current node edge pointer from deallocated edges.
+}
+void deleteNodes(pnode *head){
+    pnode currNode = *head;
+
+    while(currNode != NULL){
+        pnode helper = currNode;
+        currNode = currNode->next;
+        free(helper);
+    }
+    *head = NULL;
 }
 
 void shortsPath_cmd(pnode head){

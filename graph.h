@@ -39,6 +39,8 @@ void printEdgesOfNode(pnode root);
 
 
 void deleteGraph_cmd(pnode* head);
+void deleteEdgesOfNode(pnode root);
+void deleteNodes(pnode *head);
 
 
 void shortsPath_cmd(pnode head);
