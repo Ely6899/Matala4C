@@ -41,11 +41,11 @@ void deleteNode(pnode *head, int value);
 
 //4
 void shortsPath_cmd(pnode head);
-int dijkstra(pnode head ,pnode src, pnode dst);
+int dijkstra(pnode head, int, int);
 pnode addressOfNextNode(pnode head);
 
 
-//4
+//5
 void TSP_cmd(pnode head);
 
 

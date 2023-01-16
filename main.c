@@ -31,7 +31,7 @@ int main() {
     pnode *pointerToHead;//Pointer to the head node address.
     int graphExists = 0;
 
-    while(input != EOF){
+    while(input != EOF && input != '\n'){
         switch (input) {
             case 'A':
                 if(graphExists == 1){
@@ -42,18 +42,18 @@ int main() {
 
                 build_graph_cmd(pointerToHead);
                 graphExists = 1;
-                printGraph_cmd(firstNode);
-                printf("\n");
+                //printGraph_cmd(firstNode);
+                //printf("\n");
                 break;
             case 'B':
                 insert_node_cmd(pointerToHead);
-                printGraph_cmd(firstNode);
-                printf("\n");
+                //printGraph_cmd(firstNode);
+                //printf("\n");
                 break;
             case 'D':
                 delete_node_cmd(pointerToHead);
-                printGraph_cmd(firstNode);
-                printf("\n");
+                //printGraph_cmd(firstNode);
+                //printf("\n");
                 break;
             case 'S':
                 shortsPath_cmd(firstNode);
@@ -69,9 +69,9 @@ int main() {
         else
             input = (char)fgetc(stdin);
     }
-    printf("\n");
+    //printf("\n");
     deleteGraph_cmd(pointerToHead);
-    printf("First node address %p\n", firstNode);
-    printf("Head of first node address %p\n", *pointerToHead);
+    //printf("First node address %p\n", firstNode);
+    //printf("Head of first node address %p\n", *pointerToHead);
     return 0;
 }

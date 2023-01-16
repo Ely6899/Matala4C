@@ -4,7 +4,7 @@
 #include "graph.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define INFINITY 100000000
+#define INFINITY 1000000000
 char inputGraphs;
 
 //1
@@ -223,26 +223,6 @@ void delete_node_cmd(pnode *head){
 
     inputGraphs = (char ) getc(stdin);
 }
-/*void deleteEdgeFromNode(pnode currNode ,pedge *head){
-    *//*if((*head)->endpoint->node_num == deleteValue){
-        pedge to_remove = *head;
-        to_remove->endpoint = NULL;
-        (*head) = (*head)->next;
-        free(to_remove);
-        return;
-    }
-
-    for(pedge helper = *head; helper->next != NULL; helper = helper->next){
-        if(helper->next->endpoint->node_num == deleteValue){
-            pedge to_remove = helper->next;
-            to_remove->endpoint = NULL;
-            helper->next = helper->next->next;
-            free(to_remove);
-            return;
-        }
-    }*//*
-
-}*/
 void deleteNode(pnode *head, int value){
     if((*head)->node_num == value){
         pnode to_remove = *head;
@@ -272,27 +252,29 @@ void shortsPath_cmd(pnode head){
     inputGraphs = (char ) getc(stdin);
     int destNum = atoi(&inputGraphs); //Destination node number value
 
-    pnode temp = head;
+    int shortestPath = dijkstra(head,sourceNum, destNum);
+    printf("Dijsktra shortest path: %d\n", shortestPath);
+    inputGraphs = (char ) getc(stdin);
+}
+int dijkstra(pnode head ,int srcNum, int dstNum){
+    pnode temp1 = head;
     pnode sourceAddress = NULL, destAddress = NULL;
-    while(temp != NULL){
-        temp->shortestPathTemp = INFINITY;
-        if(temp->node_num == sourceNum && sourceAddress == NULL)
-            sourceAddress = temp;
-        else if(temp->node_num == destNum && destAddress == NULL)
-            destAddress = temp;
+    while(temp1 != NULL){
+        temp1->shortestPathTemp = INFINITY;
+        if(temp1->node_num == srcNum && sourceAddress == NULL)
+            sourceAddress = temp1;
+        else if(temp1->node_num == dstNum && destAddress == NULL)
+            destAddress = temp1;
 
-        temp = temp->next;
+        temp1 = temp1->next;
     }
 
     sourceAddress->shortestPathTemp = 0;
-    int shortestPath = dijkstra(head ,sourceAddress, destAddress);
-    printf("Shortest path between %d and %d is: %d\n", sourceNum, destNum, shortestPath);
-    inputGraphs = (char ) getc(stdin);
-}
-int dijkstra(pnode head ,pnode src, pnode dst){
+
+
     int shortestRoute = 0;
-    pnode temp = src;
-    while(temp != dst){
+    pnode temp = sourceAddress;
+    while(temp != destAddress){
         temp->isVisited = 1;
         pedge tempEdge = temp->edges;
         while(tempEdge != NULL){
@@ -310,6 +292,14 @@ int dijkstra(pnode head ,pnode src, pnode dst){
 
         shortestRoute = temp->shortestPathTemp;
     }
+
+    pnode resetNode = head;
+    while(resetNode != NULL){
+        resetNode->shortestPathTemp = INFINITY;
+        resetNode->isVisited = 0;
+        resetNode = resetNode->next;
+    }
+
     return shortestRoute;
 }
 pnode addressOfNextNode(pnode head){
@@ -327,8 +317,33 @@ pnode addressOfNextNode(pnode head){
 }
 
 
-//4
+//5
 void TSP_cmd(pnode head){
+    int sum = 0;
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+    int numOfNodes = atoi(&inputGraphs);
+    int srcNum = 0, destNum = 0;
+
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+    srcNum = atoi(&inputGraphs);
+
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+    destNum = atoi(&inputGraphs);
+
+    sum += dijkstra(head, srcNum, destNum);
+    for(int i = 1; i < numOfNodes - 1; i++){
+        srcNum = destNum;
+        inputGraphs = (char ) getc(stdin);
+        inputGraphs = (char ) getc(stdin);
+        destNum = atoi(&inputGraphs);
+
+        sum+= dijkstra(head, srcNum, destNum);
+    }
+
+    printf("TSP shortest path: %d\n", sum);
     inputGraphs = (char ) getc(stdin);
 }
 
