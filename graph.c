@@ -302,12 +302,13 @@ int dijkstra(pnode head ,pnode src, pnode dst){
             tempEdge = tempEdge->next;
         }
         temp = addressOfNextNode(temp);
-        shortestRoute = temp->shortestPathTemp;
 
         if(temp == NULL){
             shortestRoute = -1;
             break;
         }
+
+        shortestRoute = temp->shortestPathTemp;
     }
     return shortestRoute;
 }
