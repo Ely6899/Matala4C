@@ -301,7 +301,7 @@ int dijkstra(pnode head ,pnode src, pnode dst){
             }
             tempEdge = tempEdge->next;
         }
-        temp = addressOfNextNode(head);
+        temp = addressOfNextNode(temp);
         shortestRoute = temp->shortestPathTemp;
 
         if(temp == NULL){
@@ -313,16 +313,15 @@ int dijkstra(pnode head ,pnode src, pnode dst){
 }
 pnode addressOfNextNode(pnode head){
     int minValue = INFINITY;
-    pnode helper = head;
     pnode ans = NULL;
-    while(helper != NULL){
-        if(helper->shortestPathTemp < minValue && helper->isVisited == 0){
-            minValue = helper->shortestPathTemp;
-            ans = helper;
+    pedge helperEdge = head->edges;
+    while(helperEdge != NULL){
+        if(helperEdge->endpoint->shortestPathTemp < minValue && helperEdge->endpoint->isVisited == 0){
+            minValue = helperEdge->endpoint->shortestPathTemp;
+            ans = helperEdge->endpoint;
         }
-        helper = helper->next;
+        helperEdge = helperEdge->next;
     }
-
     return ans;
 }
 
