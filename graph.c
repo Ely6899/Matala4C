@@ -4,7 +4,7 @@
 #include "graph.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#define INFINITY 100000000
 char inputGraphs;
 
 //1
@@ -265,6 +265,65 @@ void deleteNode(pnode *head, int value){
 //4
 void shortsPath_cmd(pnode head){
     inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+    int sourceNum = atoi(&inputGraphs); //Source node number value
+
+    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);
+    int destNum = atoi(&inputGraphs); //Destination node number value
+
+    pnode temp = head;
+    pnode sourceAddress = NULL, destAddress = NULL;
+    while(temp != NULL){
+        temp->shortestPathTemp = INFINITY;
+        if(temp->node_num == sourceNum && sourceAddress == NULL)
+            sourceAddress = temp;
+        else if(temp->node_num == destNum && destAddress == NULL)
+            destAddress = temp;
+
+        temp = temp->next;
+    }
+
+    sourceAddress->shortestPathTemp = 0;
+    int shortestPath = dijkstra(head ,sourceAddress, destAddress);
+    printf("Shortest path between %d and %d is: %d\n", sourceNum, destNum, shortestPath);
+    inputGraphs = (char ) getc(stdin);
+}
+int dijkstra(pnode head ,pnode src, pnode dst){
+    int shortestRoute = 0;
+    pnode temp = src;
+    while(temp != dst){
+        temp->isVisited = 1;
+        pedge tempEdge = temp->edges;
+        while(tempEdge != NULL){
+            if(tempEdge->endpoint->isVisited == 0){
+                tempEdge->endpoint->shortestPathTemp = shortestRoute + tempEdge->weight;
+            }
+            tempEdge = tempEdge->next;
+        }
+        temp = addressOfNextNode(head);
+        shortestRoute = temp->shortestPathTemp;
+
+        if(temp == NULL){
+            shortestRoute = -1;
+            break;
+        }
+    }
+    return shortestRoute;
+}
+pnode addressOfNextNode(pnode head){
+    int minValue = INFINITY;
+    pnode helper = head;
+    pnode ans = NULL;
+    while(helper != NULL){
+        if(helper->shortestPathTemp < minValue && helper->isVisited == 0){
+            minValue = helper->shortestPathTemp;
+            ans = helper;
+        }
+        helper = helper->next;
+    }
+
+    return ans;
 }
 
 

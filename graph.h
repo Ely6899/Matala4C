@@ -14,6 +14,8 @@ typedef struct edge_ {
 typedef struct GRAPH_NODE_ {
     int node_num;
     pedge edges;
+    int isVisited;
+    int shortestPathTemp;
     struct GRAPH_NODE_ *next;
 } node, *pnode;
 
@@ -39,6 +41,8 @@ void deleteNode(pnode *head, int value);
 
 //4
 void shortsPath_cmd(pnode head);
+int dijkstra(pnode head ,pnode src, pnode dst);
+pnode addressOfNextNode(pnode head);
 
 
 //4
