@@ -33,7 +33,7 @@ pnode addNodeToEnd(pnode *head, int newNodeValue);
 
 //3
 void delete_node_cmd(pnode *head);
-void deleteEdgeFromNode(pnode root, pedge edge);
+void deleteEdgeFromNode(pedge *head, int deleteValue);
 void deleteNode(pnode *head, int value);
 
 

@@ -185,44 +185,64 @@ void delete_node_cmd(pnode *head){
     inputGraphs = (char ) getc(stdin);
     inputGraphs = (char ) getc(stdin); //Get required node we wish to delete.
     int deletedNodeValue = atoi(&inputGraphs);
-    pnode addressOfNodeToDelete = search_nodeList(head, deletedNodeValue);
-
+    pnode addressOfNodeToDelete = search_nodeList(head, deletedNodeValue); //Get address of desired node to delete.
     pnode currNode = *head;
+
+    //Iterate through each node to delete relevant outgoing edges
     while(currNode != NULL){
         pedge edgeHelper = currNode->edges;
+        pedge prev = edgeHelper;
         while(edgeHelper != NULL){
-            if(edgeHelper->endpoint == addressOfNodeToDelete){
-                deleteEdgeFromNode(currNode, edgeHelper);
+            if(edgeHelper->endpoint->node_num == deletedNodeValue){
+                if(edgeHelper == prev){
+                    edgeHelper = edgeHelper->next;
+                    currNode->edges = edgeHelper;
+                    free(prev);
+                    prev = edgeHelper;
+                }
+                else{
+                    prev->next = edgeHelper->next;
+                    free(edgeHelper);
+                    edgeHelper = prev->next;
+                }
             }
-            edgeHelper = edgeHelper->next;
+            else{
+                if(edgeHelper == prev)
+                    edgeHelper = edgeHelper->next;
+                else{
+                    edgeHelper = edgeHelper->next;
+                    prev = prev->next;
+                }
+            }
         }
         currNode = currNode->next;
     }
 
-    deleteEdgesOfNode(addressOfNodeToDelete);
-    deleteNode(head, deletedNodeValue);
+    deleteEdgesOfNode(addressOfNodeToDelete); //Delete outgoing edges of node to delete.
+    deleteNode(head, deletedNodeValue); //Delete node after deleting all its edges.
 
     inputGraphs = (char ) getc(stdin);
 }
-void deleteEdgeFromNode(pnode root, pedge edge){
-    if(root->edges == edge){
-        pedge to_remove = root->edges;
+/*void deleteEdgeFromNode(pnode currNode ,pedge *head){
+    *//*if((*head)->endpoint->node_num == deleteValue){
+        pedge to_remove = *head;
         to_remove->endpoint = NULL;
-        root->edges = root->edges->next;
+        (*head) = (*head)->next;
         free(to_remove);
         return;
     }
 
-    for(pedge helper = root->edges; helper->next != NULL; helper = helper->next){
-        if(helper->next == edge){
+    for(pedge helper = *head; helper->next != NULL; helper = helper->next){
+        if(helper->next->endpoint->node_num == deleteValue){
             pedge to_remove = helper->next;
             to_remove->endpoint = NULL;
             helper->next = helper->next->next;
             free(to_remove);
             return;
         }
-    }
-}
+    }*//*
+
+}*/
 void deleteNode(pnode *head, int value){
     if((*head)->node_num == value){
         pnode to_remove = *head;
@@ -266,7 +286,7 @@ void printGraph_cmd(pnode head){
 void printEdgesOfNode(pnode root){
     pedge edgeHelper = root->edges;
     while(edgeHelper != NULL){
-        printf("(%d)----(%d)---->(%d)\n", root->node_num, edgeHelper->weight, edgeHelper->endpoint->node_num);
+        printf("(%d)----[%d]---->(%d)\n", root->node_num, edgeHelper->weight, edgeHelper->endpoint->node_num);
         edgeHelper = edgeHelper->next;
     }
 }
