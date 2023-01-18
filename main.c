@@ -5,26 +5,6 @@
 char input;
 extern char inputGraphs;
 
-/*void print_nodes(pnode *head){
-    node *root = *head;
-    while(root != NULL){
-        printf("%d->", root->node_num);
-        root = root->next;
-    }
-    printf("\n");
-}
-
-void deallocate_nodes(pnode *head){
-    node *root = *head;
-    node *temp = *head;
-    while(root != NULL){
-        root = root->next;
-        free(temp);
-        temp = root;
-    }
-    free(root);
-}*/
-
 int main() {
     input = (char)fgetc(stdin);
     pnode firstNode;//first node allocation.
@@ -42,18 +22,12 @@ int main() {
 
                 build_graph_cmd(pointerToHead);
                 graphExists = 1;
-                //printGraph_cmd(firstNode);
-                //printf("\n");
                 break;
             case 'B':
                 insert_node_cmd(pointerToHead);
-                //printGraph_cmd(firstNode);
-                //printf("\n");
                 break;
             case 'D':
                 delete_node_cmd(pointerToHead);
-                //printGraph_cmd(firstNode);
-                //printf("\n");
                 break;
             case 'S':
                 shortsPath_cmd(firstNode);
@@ -69,9 +43,7 @@ int main() {
         else
             input = (char)fgetc(stdin);
     }
-    //printf("\n");
+
     deleteGraph_cmd(pointerToHead);
-    //printf("First node address %p\n", firstNode);
-    //printf("Head of first node address %p\n", *pointerToHead);
     return 0;
 }

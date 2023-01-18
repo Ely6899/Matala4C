@@ -316,7 +316,7 @@ pnode minShortestPathTemp(pnode head){
         }
         temp = temp->next;
     }
-    //printf("Shortest path: %d\n", ans->node_num);
+
     return ans;
 }
 pnode addressOfNextNode(pnode head, pnode ans){
@@ -354,26 +354,6 @@ void TSP_cmd(pnode head){
     free(permutationString);
     printf("TSP shortest path: %d \n", minAns);
     inputGraphs = (char ) getc(stdin);
-    /*inputGraphs = (char ) getc(stdin);
-    inputGraphs = (char ) getc(stdin);
-    srcNum = atoi(&inputGraphs);
-
-    inputGraphs = (char ) getc(stdin);
-    inputGraphs = (char ) getc(stdin);
-    destNum = atoi(&inputGraphs);
-
-    sum += dijkstra(head, srcNum, destNum);
-    for(int i = 1; i < numOfNodes - 1; i++){
-        srcNum = destNum;
-        inputGraphs = (char ) getc(stdin);
-        inputGraphs = (char ) getc(stdin);
-        destNum = atoi(&inputGraphs);
-
-        sum+= dijkstra(head, srcNum, destNum);
-    }
-
-    printf("TSP shortest path: %d\n", sum);
-    inputGraphs = (char ) getc(stdin);*/
 }
 void permute(char* string, int startIndex, int endIndex, int* ansAddress ,pnode head){
     if(startIndex == endIndex){
@@ -414,18 +394,6 @@ void swap(char *x, char *y){
     *x = *y;
     *y = temp;
 }
-
-
-/*int factorial(int n){
-    int ans = 1;
-    if(n == 0)
-        return ans;
-    for(int i = 1; i <= n; i++){
-        ans *= i;
-    }
-    return ans;
-}*/
-
 
 /*
  * Print functions
