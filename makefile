@@ -5,7 +5,7 @@ FLAGS = -Wall -g
 all: main
 
 main: main.o graph.o
-	$(COMPILER) $(FLAGS) main.o graph.o -o main
+	$(COMPILER) $(FLAGS) main.o graph.o -o graph
 
 main.o: main.c graph.h
 	$(COMPILER) -c $(FLAGS) main.c
@@ -14,4 +14,4 @@ graph.o: graph.c graph.h
 	$(COMPILER) -c $(FLAGS) graph.c
 
 clean:
-	rm -f *.o main
+	rm -f *.o graph
