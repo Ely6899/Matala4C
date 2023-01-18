@@ -253,7 +253,7 @@ void shortsPath_cmd(pnode head){
     int destNum = atoi(&inputGraphs); //Destination node number value
 
     int shortestPath = dijkstra(head,sourceNum, destNum);
-    printf("Dijsktra shortest path: %d\n", shortestPath);
+    printf("Dijsktra shortest path: %d \n", shortestPath);
     inputGraphs = (char ) getc(stdin);
 }
 int dijkstra(pnode head ,int srcNum, int dstNum){
@@ -283,9 +283,12 @@ int dijkstra(pnode head ,int srcNum, int dstNum){
             }
             tempEdge = tempEdge->next;
         }
-        temp = addressOfNextNode(temp);
+        pnode ansOfTrueShortestPath = minShortestPathTemp(head);
+        if(ansOfTrueShortestPath != NULL)
+            temp = addressOfNextNode(temp, ansOfTrueShortestPath);
 
-        if(temp == NULL){
+
+        if(temp == NULL || ansOfTrueShortestPath == NULL){
             shortestRoute = -1;
             break;
         }
@@ -302,9 +305,22 @@ int dijkstra(pnode head ,int srcNum, int dstNum){
 
     return shortestRoute;
 }
-pnode addressOfNextNode(pnode head){
-    int minValue = INFINITY;
+pnode minShortestPathTemp(pnode head){
+    int min = INFINITY;
+    pnode temp = head;
     pnode ans = NULL;
+    while(temp != NULL){
+        if(temp->shortestPathTemp < min && temp->isVisited == 0){
+            min = temp->shortestPathTemp;
+            ans = temp;
+        }
+        temp = temp->next;
+    }
+    //printf("Shortest path: %d\n", ans->node_num);
+    return ans;
+}
+pnode addressOfNextNode(pnode head, pnode ans){
+    int minValue = ans->shortestPathTemp;
     pedge helperEdge = head->edges;
     while(helperEdge != NULL){
         if(helperEdge->endpoint->shortestPathTemp < minValue && helperEdge->endpoint->isVisited == 0){
@@ -319,13 +335,26 @@ pnode addressOfNextNode(pnode head){
 
 //5
 void TSP_cmd(pnode head){
-    int sum = 0;
     inputGraphs = (char ) getc(stdin);
     inputGraphs = (char ) getc(stdin);
     int numOfNodes = atoi(&inputGraphs);
-    int srcNum = 0, destNum = 0;
+    //int srcNum = 0, destNum = 0;
+    char* permutationString = (char* )malloc(sizeof (char ) * numOfNodes);
 
+    //Build first permutation string
+    for(int i = 0; i < numOfNodes; i++){
+        inputGraphs = (char ) getc(stdin);
+        inputGraphs = (char ) getc(stdin);
+
+        *(permutationString + i) = inputGraphs;
+    }
+
+    int minAns = -1;
+    permute(permutationString, 0, numOfNodes - 1, &minAns, head);
+    free(permutationString);
+    printf("TSP shortest path: %d \n", minAns);
     inputGraphs = (char ) getc(stdin);
+    /*inputGraphs = (char ) getc(stdin);
     inputGraphs = (char ) getc(stdin);
     srcNum = atoi(&inputGraphs);
 
@@ -344,8 +373,59 @@ void TSP_cmd(pnode head){
     }
 
     printf("TSP shortest path: %d\n", sum);
-    inputGraphs = (char ) getc(stdin);
+    inputGraphs = (char ) getc(stdin);*/
 }
+void permute(char* string, int startIndex, int endIndex, int* ansAddress ,pnode head){
+    if(startIndex == endIndex){
+        int tempSum = 0;
+        for(int i = 0; i < endIndex; i++){
+            char srcChar = string[i];
+            char dstChar = string[i+1];
+            int srcNum = srcChar - '0';
+            int dstNum = dstChar - '0';
+            int tempAns = dijkstra(head, srcNum, dstNum);
+            if(tempAns > 0)
+                tempSum+= tempAns;
+            else{
+                tempSum = -1;
+                break;
+            }
+        }
+
+        if(*ansAddress == -1 && tempSum > 0)
+            *ansAddress = tempSum;
+        else
+        {
+            if(tempSum < *ansAddress && tempSum != -1)
+                *ansAddress = tempSum;
+        }
+    }
+    else{
+        for(int i = startIndex; i <= endIndex; i++){
+            swap((string + i), (string + startIndex));
+            permute(string, startIndex + 1, endIndex, ansAddress, head);
+            swap((string + i), (string + startIndex));
+        }
+    }
+}
+void swap(char *x, char *y){
+    char temp;
+    temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+
+/*int factorial(int n){
+    int ans = 1;
+    if(n == 0)
+        return ans;
+    for(int i = 1; i <= n; i++){
+        ans *= i;
+    }
+    return ans;
+}*/
+
 
 /*
  * Print functions

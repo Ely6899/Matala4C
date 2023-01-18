@@ -42,11 +42,14 @@ void deleteNode(pnode *head, int value);
 //4
 void shortsPath_cmd(pnode head);
 int dijkstra(pnode head, int, int);
-pnode addressOfNextNode(pnode head);
+pnode minShortestPathTemp(pnode head);
+pnode addressOfNextNode(pnode head, pnode ans);
 
 
 //5
 void TSP_cmd(pnode head);
+void permute(char *string, int startIndex, int endIndex, int *ansAddress, pnode pNode);
+void swap(char *x, char *y);
 
 
 /*
